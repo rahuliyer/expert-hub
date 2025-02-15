@@ -54,7 +54,7 @@ const expertClasses = [
   {
     id: 5,
     title: "Corporate Theft Prevention",
-    instructor: "Danny Ocean, Security Consultant",
+    instructor: "Danny Ocean and Rusty Ryan, Security Consultants",
     price: 511.99,
     duration: "116 minutes",
     level: "Advanced",
