@@ -37,7 +37,7 @@ export default function ClientPage({ initialProducts }) {
         <div className="bg-white shadow">
             <div className="container mx-auto p-4">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-gray-800">ExpertHub: Hollywood's Finest</h1>
+                <h1 className="text-2xl font-bold text-gray-800">ExpertHub: Learn from the Best in the Business!</h1>
                 <div className="flex items-center gap-4">
                 <span className="text-sm">
                     Cart: {getTotalItems()} courses (${getTotalPrice()})
