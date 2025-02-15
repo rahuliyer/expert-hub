@@ -2,7 +2,8 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 // Mock data for expert classes
 const expertClasses = [
@@ -53,7 +54,7 @@ const expertClasses = [
   {
     id: 5,
     title: "Corporate Theft Prevention",
-    instructor: "Danny Ocean and Rusty Ryan, Security Consultants",
+    instructor: "Danny Ocean, Security Consultant",
     price: 511.99,
     duration: "116 minutes",
     level: "Advanced",
@@ -75,10 +76,24 @@ const expertClasses = [
 ];
 
 export default function HomePage() {
+  const router = useRouter();
   const [cart, setCart] = useState([]);
 
+  useEffect(() => {
+    // Only access localStorage after component mounts (client-side)
+    const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCart(savedCart);
+  }, []);
+
   const addToCart = (course) => {
-    setCart([...cart, course]);
+    // Create a unique instance of the course with a timestamp
+    const courseWithTimestamp = {
+      ...course,
+      cartId: `${course.id}-${Date.now()}`  // Using a timestamp to make each cart item unique
+    };
+    const newCart = [...cart, courseWithTimestamp];
+    setCart(newCart);
+    localStorage.setItem('cart', JSON.stringify(newCart));
   };
 
   const getTotalItems = () => cart.length;
@@ -95,7 +110,10 @@ export default function HomePage() {
               <span className="text-sm">
                 Cart: {getTotalItems()} courses (${getTotalPrice()})
               </span>
-              <Button disabled={cart.length === 0}>
+              <Button
+                disabled={cart.length === 0}
+                onClick={() => router.push('/cart')}
+              >
                 Checkout
               </Button>
             </div>
