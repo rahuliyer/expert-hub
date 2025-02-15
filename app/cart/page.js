@@ -23,11 +23,36 @@ export default function CartPage() {
     router.push('/');
   };
 
-  const handlePay = () => {
-    alert('Payment processing would happen here');
-    localStorage.removeItem('cart');
-    setCart([]);
-    router.push('/');
+  const handlePay = async () => {
+    try {
+      const response = await fetch('/api/create_payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: cart
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.url) {
+        localStorage.removeItem('cart');
+        setCart([]);
+        // Redirect to Stripe's payment page
+        window.location.href = data.url;
+      } else {
+        throw new Error('No payment URL received');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('There was a problem processing your payment. Please try again.');
+    }
   };
 
   if (cart.length === 0) {
