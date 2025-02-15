@@ -22,6 +22,7 @@ export async function POST(request) {
       mode: 'payment',
       success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?canceled=true`,
+      automatic_tax: {enabled: true},
     });
 
     return NextResponse.json({ url: session.url });

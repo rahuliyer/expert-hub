@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react';
+// app/components/PaymentStatusModal.js
+"use client";
+
+import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
   AlertDialog,
@@ -11,7 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { CheckCircle, XCircle } from 'lucide-react';
 
-const PaymentStatusModal = () => {
+const PaymentStatusModalContent = () => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(null);
   const searchParams = useSearchParams();
@@ -70,6 +73,14 @@ const PaymentStatusModal = () => {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  );
+};
+
+const PaymentStatusModal = () => {
+  return (
+    <Suspense fallback={null}>
+      <PaymentStatusModalContent />
+    </Suspense>
   );
 };
 
