@@ -25,7 +25,7 @@ export default function CartPage() {
 
   const handlePay = async () => {
     try {
-      const response = await fetch('/api/create_payment_link', {
+      const response = await fetch('/api/create_checkout_session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
