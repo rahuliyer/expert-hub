@@ -16,7 +16,7 @@ const expertClasses = [
     level: "Advanced",
     category: "Science",
     description: "A comprehensive study of temporal physics and classic car maintenance featuring the DeLorean DMC-12.",
-    image: "/Back_to_the_Future.jpg"
+    image: "/Back_To_The_Future.jpg"
   },
   {
     id: 2,
