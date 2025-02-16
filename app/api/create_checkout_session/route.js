@@ -25,7 +25,10 @@ export async function POST(request) {
       automatic_tax: {enabled: true},
     });
 
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({
+        url: session.url,
+        secret: session.client_secret,
+     });
   } catch (error) {
     console.error('Payment link creation error:', error);
     return NextResponse.json(
