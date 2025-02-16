@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense } from "react"
 
 import PaymentStatusModal from './PaymentStatusModal';
 
-export default function ClientPage({ initialProducts }) {
+function ClientPageContent({ initialProducts }) {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -94,5 +95,13 @@ export default function ClientPage({ initialProducts }) {
         </div>
         </div>
     </>
+  )
+}
+
+export default function ClientPage({ initialProducts }) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ClientPageContent initialProducts={initialProducts} />
+    </Suspense>
   )
 }
