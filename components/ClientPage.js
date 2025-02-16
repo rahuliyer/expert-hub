@@ -2,7 +2,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 
 import PaymentStatusModal from './PaymentStatusModal';
@@ -34,7 +34,7 @@ export default function ClientPage({ initialProducts }) {
   const getTotalPrice = () => cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
   return (
-    <>
+    <Suspense>
         <PaymentStatusModal />
         <div className="min-h-screen bg-gray-50">
         {/* Header with Cart */}
@@ -93,6 +93,6 @@ export default function ClientPage({ initialProducts }) {
             </div>
         </div>
         </div>
-    </>
+    </Suspense>
   )
 }

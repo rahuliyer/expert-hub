@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 
 export default function CartPage() {
   const router = useRouter();
@@ -76,6 +76,7 @@ export default function CartPage() {
   }
 
   return (
+    <Suspense>
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
@@ -125,5 +126,6 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+    </Suspense>
   )
 }
