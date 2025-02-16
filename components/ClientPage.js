@@ -3,12 +3,16 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 
 import PaymentStatusModal from './PaymentStatusModal';
 
 export default function ClientPage({ initialProducts }) {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const checkoutType = searchParams.get('checkout_type') || 'checkout';
+
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
@@ -44,7 +48,7 @@ export default function ClientPage({ initialProducts }) {
                 </span>
                 <Button
                     disabled={cart.length === 0}
-                    onClick={() => router.push('/cart')}
+                    onClick={() => router.push(`/cart?checkout_type=${checkoutType}`)}
                 >
                     Checkout
                 </Button>

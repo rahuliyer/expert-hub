@@ -2,11 +2,15 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
 
 export default function CartPage() {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const checkoutType = searchParams.get('checkout_type') || 'checkout';
+
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
@@ -25,7 +29,11 @@ export default function CartPage() {
 
   const handlePay = async () => {
     try {
-      const response = await fetch('/api/create_checkout_session', {
+      const endpoint = checkoutType === 'elements'
+      ? '/api/create_payment_link'
+      : '/api/create_checkout_session';
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
