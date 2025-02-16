@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect, Suspense } from "react"
 
-export default function CartPage() {
+function CartPageContent() {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -126,6 +126,14 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+    </Suspense>
+  )
+}
+
+export default function CartPage() {
+  return (
+    <Suspense>
+      <CartPageContent />
     </Suspense>
   )
 }

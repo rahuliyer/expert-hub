@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 
 import PaymentStatusModal from './PaymentStatusModal';
 
-export default function ClientPage({ initialProducts }) {
+function ClientPageContent({ initialProducts }) {
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -34,7 +34,7 @@ export default function ClientPage({ initialProducts }) {
   const getTotalPrice = () => cart.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
   return (
-    <Suspense>
+    <>
         <PaymentStatusModal />
         <div className="min-h-screen bg-gray-50">
         {/* Header with Cart */}
@@ -93,6 +93,14 @@ export default function ClientPage({ initialProducts }) {
             </div>
         </div>
         </div>
+    </>
+  )
+}
+
+export default function ClientPage({ initialProducts }) {
+  return (
+    <Suspense>
+      <ClientPageContent initialProducts={initialProducts} />
     </Suspense>
   )
 }
