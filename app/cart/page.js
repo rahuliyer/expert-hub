@@ -29,7 +29,12 @@ function CartPageContent() {
 
   const handlePay = async () => {
     try {
-      const endpoint = checkoutType === 'elements'
+      if (checkoutType == 'elements') {
+        router.push('/checkout');
+        return;
+      }
+
+      const endpoint = checkoutType === 'payment_link'
       ? '/api/create_payment_link'
       : '/api/create_checkout_session';
 
