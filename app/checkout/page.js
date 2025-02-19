@@ -36,6 +36,10 @@ export function CheckoutForm({cart, clearCart}) {
     };
 
     const handleEmailBlur = async () => {
+        if (!email || email.trim() === '') {
+            return;
+        }
+
         const result = await checkout.updateEmail(email)
         if (result.error) {
             setError(result.error);
