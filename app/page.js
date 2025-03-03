@@ -12,9 +12,19 @@ const PRODUCT_IDS = [
   "prod_RmFFWtX2rBcvLR"
 ];
 
+// Fisher-Yates (Knuth) shuffle algorithm
+function shuffleArray(array) {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 async function getData() {
   const products = await getProducts(PRODUCT_IDS);
-  return products;
+  return shuffleArray(products);
 }
 
 // This is a server component
