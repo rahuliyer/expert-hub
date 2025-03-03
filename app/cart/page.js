@@ -29,14 +29,20 @@ function CartPageContent() {
 
   const handlePay = async () => {
     try {
-      if (checkoutType == 'elements') {
+      if (checkoutType === 'elements') {
         router.push('/checkout');
         return;
       }
 
+      // Define the endpoint based on checkout type
       const endpoint = checkoutType === 'payment_link'
-      ? '/api/create_payment_link'
-      : '/api/create_checkout_session';
+        ? '/api/create_payment_link'
+        : '/api/create_checkout_session';
+
+      // Set ui_mode based on checkout type
+      const ui_mode = checkoutType === 'embedded' 
+        ? 'embedded' 
+        : (checkoutType === 'elements' ? 'elements' : 'hosted');
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -44,7 +50,9 @@ function CartPageContent() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          items: cart
+          items: cart,
+          ui_mode: ui_mode,
+          tax_enabled: true
         }),
       });
 
@@ -54,13 +62,24 @@ function CartPageContent() {
 
       const data = await response.json();
 
+      // For embedded checkout, redirect to embedded checkout page
+      if (ui_mode === 'embedded' && data.clientSecret) {
+        // Store client secret in session storage for embedded checkout
+        sessionStorage.setItem('checkoutClientSecret', data.clientSecret);
+        localStorage.removeItem('cart');
+        setCart([]);
+        router.push('/embedded-checkout');
+        return;
+      }
+      
+      // For hosted checkout, redirect to Stripe
       if (data.url) {
         localStorage.removeItem('cart');
         setCart([]);
         // Redirect to Stripe's payment page
         window.location.href = data.url;
       } else {
-        throw new Error('No payment URL received');
+        throw new Error('No payment URL or client secret received');
       }
     } catch (error) {
       console.error('Payment error:', error);

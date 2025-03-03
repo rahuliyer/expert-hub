@@ -12,6 +12,14 @@ function ClientPageContent({ initialProducts }) {
 
   const searchParams = useSearchParams();
   const checkoutType = searchParams.get('checkout_type') || 'checkout';
+  
+  // Available checkout types
+  const checkoutTypes = [
+    { id: 'checkout', name: 'Standard Checkout' },
+    { id: 'elements', name: 'Elements Checkout' },
+    { id: 'embedded', name: 'Embedded Checkout' },
+    { id: 'payment_link', name: 'Payment Link' }
+  ];
 
   const [cart, setCart] = useState([]);
 
@@ -40,20 +48,34 @@ function ClientPageContent({ initialProducts }) {
         {/* Header with Cart */}
         <div className="bg-white shadow">
             <div className="container mx-auto p-4">
-            <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center flex-col md:flex-row gap-4">
                 <h1 className="text-2xl font-bold text-gray-800">ExpertHub: Learn from the Best in the Business!</h1>
-                <div className="flex items-center gap-4">
-                <span className="text-sm">
-                    Cart: {getTotalItems()} courses (${getTotalPrice()})
-                </span>
-                <Button
-                    disabled={cart.length === 0}
-                    onClick={() => router.push(`/cart?checkout_type=${checkoutType}`)}
-                >
-                    Checkout
-                </Button>
+                <div className="flex items-center gap-4 flex-wrap justify-end">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">Checkout Type:</span>
+                    <select 
+                      className="p-2 border rounded text-sm"
+                      value={checkoutType}
+                      onChange={(e) => router.push(`/?checkout_type=${e.target.value}`)}
+                    >
+                      {checkoutTypes.map(type => (
+                        <option key={type.id} value={type.id}>{type.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm">
+                      Cart: {getTotalItems()} courses (${getTotalPrice()})
+                    </span>
+                    <Button
+                      disabled={cart.length === 0}
+                      onClick={() => router.push(`/cart?checkout_type=${checkoutType}`)}
+                    >
+                      Checkout
+                    </Button>
+                  </div>
                 </div>
-            </div>
+              </div>
             </div>
         </div>
 

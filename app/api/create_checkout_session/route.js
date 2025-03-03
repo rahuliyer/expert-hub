@@ -16,36 +16,58 @@ export async function POST(request) {
 
     const { items, ui_mode, tax_enabled } = body;
 
-    if (ui_mode == 'hosted' || ui_mode == null) {
+    if (ui_mode === 'hosted' || ui_mode == null) {
+        // Hosted checkout
         const session = await stripe.checkout.sessions.create({
         line_items: items.map(item => ({
             price: item.priceId,
             quantity: 1,
         })),
         mode: 'payment',
-        ui_mode: ui_mode || 'hosted',
+        ui_mode: 'hosted',
         success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/?canceled=true`,
-        automatic_tax: {enabled: true},
+        automatic_tax: {enabled: tax_enabled === true},
         });
 
         return NextResponse.json({
             url: session.url,
         });
-    } else {
+    } else if (ui_mode === 'embedded') {
+        // Embedded checkout
         const session = await stripe.checkout.sessions.create({
             line_items: items.map(item => ({
                 price: item.priceId,
                 quantity: 1,
             })),
             mode: 'payment',
-            ui_mode: ui_mode || 'hosted',
+            ui_mode: 'embedded',
+            return_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
+            automatic_tax: {enabled: tax_enabled === true},
+        });
+
+        return NextResponse.json({
+            clientSecret: session.client_secret,
+            url: session.url,
+        });
+    } else {
+        // Elements checkout
+        const session = await stripe.checkout.sessions.create({
+            line_items: items.map(item => ({
+                price: item.priceId,
+                quantity: 1,
+            })),
+            mode: 'payment',
+            ui_mode: 'custom',
+            adaptive_pricing: {
+                enabled: true,
+            },
             return_url: `${origin}/`,
         });
 
-            return NextResponse.json({
-                secret: session.client_secret,
-            });
+        return NextResponse.json({
+            secret: session.client_secret,
+        });
     }
   } catch (error) {
     console.error('Payment link creation error:', error);
